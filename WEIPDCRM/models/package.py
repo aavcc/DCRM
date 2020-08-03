@@ -67,7 +67,8 @@ class Package(models.Model):
     )
     c_section = models.ForeignKey(
         Section,
-        verbose_name=_("Section")
+        verbose_name=_("Section"),
+        on_delete=models.DO_NOTHING,  # this fixes
     )
     online_icon = models.FileField(
         verbose_name=_("Online Icon"),

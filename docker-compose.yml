@@ -6,6 +6,7 @@ services:
     container_name: dcrm_web
     hostname: dcrm_web
     image: nginx:1.17.6
+    restart: always
     ports:
       #- "8080:80"   # test
       - "80:80"    # production
@@ -32,7 +33,7 @@ services:
     volumes:
       - app_upload:/home/dcrm
       - ./docker/pure-ftpd/passwd:/etc/pure-ftpd/passwd
-      # - ./docker/pure-ftpd/ssl:/etc/ssl/private
+      #- ./docker/pure-ftpd/ssl:/etc/ssl/private
     depends_on:
       - app
     environment:
@@ -40,10 +41,13 @@ services:
       FTP_USER_NAME: dcrm                               # important: modify your ftp username
       FTP_USER_PASS: dcrm_ftp_password                  # important: modify your ftp password
       FTP_USER_HOME: /home/dcrm
-      # ADDED_FLAGS: "--tls=2"
+      #ADDED_FLAGS: "--tls=2"
   app:
     container_name: dcrm_app
     hostname: dcrm_app
+    restart: always
+    #ports:
+    #  - "8001:8001"
     build: .
     tty: true
     stdin_open: true
@@ -66,6 +70,7 @@ services:
   worker-default:
     container_name: dcrm_worker-default
     hostname: dcrm_worker-default
+    restart: always
     build: .
     deploy:
       mode: replicated
@@ -89,6 +94,7 @@ services:
   worker-high:
     container_name: dcrm_worker-high
     hostname: dcrm_worker-high
+    restart: always
     build: .
     deploy:
       mode: replicated
@@ -112,6 +118,7 @@ services:
   scheduler:
     container_name: dcrm_scheduler
     hostname: dcrm_scheduler
+    restart: always
     build: .
     volumes:
       - app_static:/usr/src/app/static
@@ -157,7 +164,7 @@ services:
 volumes:
   db_data:        # mysql database
   app_static:     # static files
-  app_resources:  # packages
+  app_resources:  # debian packages
   app_upload:     # upload root
   app_temp:
 

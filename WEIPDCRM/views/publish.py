@@ -103,7 +103,7 @@ def basic_resource_fetch(request, resource_name):
         "Packages",
         "Packages.gz",
         "Packages.bz2",
-        "CydiaIcon",
+        #"CydiaIcon",
         "CydiaIcon.png"
     ]
     if resource_name not in rename_list:
@@ -131,10 +131,14 @@ def basic_resource_fetch(request, resource_name):
             response = HttpResponse()
             response['X-Accel-Redirect'] = request_url
             response['Content-Type'] = 'application/octet-stream'
+            response['Content-Disposition'] = "attachment; filename=\"" + quote_plus(resource_name) + "\""
             return response
         elif pref.web_server == 1:
-            # TODO: Apache Support
-            pass
+            response = HttpResponse()
+            response['X-Sendfile'] = request_path
+            response['Content-Type'] = 'application/octet-stream'
+            response['Content-Disposition'] = "attachment; filename=\"" + quote_plus(resource_name) + "\""
+            return response
         elif pref.web_server == 2:
             # TODO: Tomcat Support
             pass
